@@ -18,7 +18,7 @@
 		created_at: number;
 		kind: number;
 		tags: string[];
-		content: EthBody;
+		content: string; // JSON.stringify of EthBody
 		sig: string;
 	}
 
@@ -60,7 +60,6 @@
 
 		const unixTime = Math.floor(Date.now() / 1000);
 		const data = [0, pubkeyHex, unixTime, 1, [], JSON.stringify(ethEvent)];
-		console.log(data);
 		const eventString = JSON.stringify(data);
 		const eventByteArray = new TextEncoder().encode(eventString);
 		const eventIdRaw = await secp.utils.sha256(eventByteArray);
@@ -75,14 +74,20 @@
 			created_at: unixTime,
 			kind: 1,
 			tags: [],
-			content: ethEvent,
+			content: JSON.stringify(ethEvent),
 			sig: schnorrSignature
 		};
 
-		await fetch('/push', {
-			method: 'POST',
-			body: JSON.stringify(signedEvent)
-		});
+		let url = 'wss://nostr-pub.wellorder.net';
+		let socket = new WebSocket(url);
+		socket.onopen = function (event) {
+			console.log(`Connected to ${url}`);
+			socket.send(JSON.stringify(['EVENT', signedEvent]));
+		};
+
+		socket.onmessage = function (event) {
+			console.log(event);
+		};
 	}
 </script>
 
