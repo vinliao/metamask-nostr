@@ -18,7 +18,7 @@
 		created_at: number;
 		kind: number;
 		tags: string[];
-		content: string; // EthBody but string
+		content: EthBody;
 		sig: string;
 	}
 
@@ -38,7 +38,7 @@
 
 		// data and signature
 		const message =
-			'MINT CHOCOLATE CHIP ICE CREAM IS THE BEST ICE CREAM FLAVOR!---Create NIP-01 event with MetaMask on nip01metamask.netlify.app.';
+			'MINT CHOCOLATE CHIP ICE CREAM IS THE BEST ICE CREAM FLAVOR!---Create NIP-01 event with MetaMask on https://nip01eth.netlify.app.';
 		const signer = provider.getSigner();
 		const rawAddress = await signer.getAddress();
 		const ethAddress = rawAddress.toLowerCase();
@@ -75,7 +75,7 @@
 			created_at: unixTime,
 			kind: 1,
 			tags: [],
-			content: JSON.stringify(ethEvent),
+			content: ethEvent,
 			sig: schnorrSignature
 		};
 

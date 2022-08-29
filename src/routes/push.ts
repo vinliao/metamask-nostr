@@ -3,8 +3,8 @@ import webSocket from 'ws';
 
 export async function POST({ request }) {
   const rawBody = await request.text();
-  const body = JSON.parse(rawBody);
-  // body.content = JSON.stringify(body.content)
+  let body = JSON.parse(rawBody);
+  body.content = JSON.stringify(body.content);
 
   const ws = new webSocket('wss://nostr-pub.wellorder.net');
 
