@@ -13,6 +13,7 @@ export async function POST({ request }) {
   ws.onopen = () => ws.send(JSON.stringify(["EVENT", body]));
   ws.onmessage = (msg: string) => {
     console.log(msg);
+    ws.close();
   };
 
   return { status: 200 };
